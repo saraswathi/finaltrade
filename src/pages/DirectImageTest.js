@@ -1,63 +1,51 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
-
-// Import images directly
-import backgroundImage from '../images/cyberpunk-alley-bg.jpg';
-import toedLogo from '../images/toed-logo.png';
-import mnrchLogo from '../images/mnrch-logo.png';
-import monarchImage from '../images/monarch.png';
-import slothImage from '../images/sloth.png';
 
 const DirectImageTest = () => {
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography variant="h3" sx={{ mb: 4, textAlign: 'center', color: 'white' }}>
-        Direct Image Import Test
-      </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-        <Box>
-          <Typography variant="h5" sx={{ color: 'white' }}>Background Image:</Typography>
+    <div>
+      <h2>Direct Image Test</h2>
+      <div>
+        <img 
+          src="https://saraswathi.github.io/finaltrade/assets/images/cyberpunk-alley-bg.jpg" 
+          alt="Background" 
+          style={{ width: '400px', border: '1px solid white' }} 
+        />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginTop: '20px' }}>
+        <div>
+          <h3>$3TOED Logo</h3>
           <img 
-            src={backgroundImage} 
-            alt="Background" 
-            style={{ width: '300px', border: '1px solid white' }} 
+            src="https://saraswathi.github.io/finaltrade/assets/images/toed-logo.png" 
+            alt="3TOED Logo" 
+            style={{ width: '100px', border: '1px solid white' }} 
           />
-        </Box>
-        
-        <Box>
-          <Typography variant="h5" sx={{ color: 'white' }}>Logo Images:</Typography>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <img 
-              src={toedLogo} 
-              alt="TOED Logo" 
-              style={{ width: '100px', border: '1px solid white' }} 
-            />
-            <img 
-              src={mnrchLogo} 
-              alt="MNRCH Logo" 
-              style={{ width: '100px', border: '1px solid white' }} 
-            />
-          </div>
-        </Box>
-        
-        <Box>
-          <Typography variant="h5" sx={{ color: 'white' }}>Character Images:</Typography>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <img 
-              src={monarchImage} 
-              alt="Monarch" 
-              style={{ width: '100px', border: '1px solid white' }} 
-            />
-            <img 
-              src={slothImage} 
-              alt="Sloth" 
-              style={{ width: '100px', border: '1px solid white' }} 
-            />
-          </div>
-        </Box>
-      </Box>
-    </Container>
+        </div>
+        <div>
+          <h3>$MNRCH Logo</h3>
+          <img 
+            src="https://saraswathi.github.io/finaltrade/assets/images/mnrch-logo.png" 
+            alt="MNRCH Logo" 
+            style={{ width: '100px', border: '1px solid white' }} 
+          />
+        </div>
+        <div>
+          <h3>Monarch Butterfly</h3>
+          <img 
+            src="https://saraswathi.github.io/finaltrade/assets/images/monarch.png" 
+            alt="Monarch" 
+            style={{ width: '100px', border: '1px solid white' }} 
+          />
+        </div>
+        <div>
+          <h3>Sloth</h3>
+          <img 
+            src="https://saraswathi.github.io/finaltrade/assets/images/sloth.png" 
+            alt="Sloth" 
+            style={{ width: '100px', border: '1px solid white' }} 
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

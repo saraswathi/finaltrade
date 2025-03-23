@@ -38,12 +38,12 @@ const ImageTest = () => {
           <Typography variant="h5" sx={{ color: 'white' }}>Character Images:</Typography>
           <div style={{ display: 'flex', gap: '20px' }}>
             <img 
-              src="/assets/images/monarch.png" 
+              src={`${process.env.PUBLIC_URL}/assets/images/monarch.png`} 
               alt="Monarch" 
               style={{ width: '100px', border: '1px solid white' }} 
             />
             <img 
-              src="/assets/images/sloth.png" 
+              src={`${process.env.PUBLIC_URL}/assets/images/sloth.png`} 
               alt="Sloth" 
               style={{ width: '100px', border: '1px solid white' }} 
             />
