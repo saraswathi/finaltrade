@@ -18,6 +18,16 @@ import Profile from './pages/Profile';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 
+// Utility for image paths
+const getImagePath = (imageName) => {
+  // Use absolute URL for deployed site
+  if (process.env.NODE_ENV === 'production') {
+    return `https://saraswathi.github.io/finaltrade/assets/images/${imageName}`;
+  }
+  // Use relative path for development
+  return `${process.env.PUBLIC_URL}/assets/images/${imageName}`;
+};
+
 // Create a cyberpunk theme instance
 const cyberpunkTheme = createTheme({
   palette: {
@@ -149,7 +159,7 @@ const cyberpunkTheme = createTheme({
             backgroundColor: '#00e5ff',
             borderRadius: '4px',
           },
-          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/cyberpunk-alley-bg.jpg)`,
+          backgroundImage: `url(${getImagePath('cyberpunk-alley-bg.jpg')})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
@@ -176,7 +186,7 @@ function App() {
       <CssBaseline />
       <Web3Provider>
         <GameProvider>
-        <Router basename="/finaltrade">
+          <Router basename="/finaltrade">
             <div className="app-container">
               <Header />
               <main className="main-content" style={{ minHeight: 'calc(100vh - 160px)', padding: '24px 0' }}>
