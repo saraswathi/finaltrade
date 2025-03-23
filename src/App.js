@@ -176,7 +176,7 @@ function App() {
       <CssBaseline />
       <Web3Provider>
         <GameProvider>
-          <Router>
+        <Router basename="/finaltrade">
             <div className="app-container">
               <Header />
               <main className="main-content" style={{ minHeight: 'calc(100vh - 160px)', padding: '24px 0' }}>
