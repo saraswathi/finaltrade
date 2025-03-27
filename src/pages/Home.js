@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+[paste the Home.js code here]import React, { useState, useEffect } from 'react';
 import { 
   Container, 
   Box, 
@@ -183,8 +183,7 @@ const Home = () => {
           <Grid container spacing={3} justifyContent="center">
             {/* TOED Token Card */}
             <Grid item xs={12} md={6} lg={5}>
-              <Card 
-                sx={{<Card 
+              <Card
                 sx={{
                   height: '100%',
                   overflow: 'hidden',
