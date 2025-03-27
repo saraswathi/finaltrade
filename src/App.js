@@ -13,7 +13,7 @@ import Battle from './pages/Battle';
 import Presale from './pages/Presale';
 import Statistics from './pages/Statistics';
 import Profile from './pages/Profile';
-import SimpleImageTest from './pages/SimpleImageTest';
+import ImageTest from './pages/ImageTest';
 
 // Components
 import Header from './components/common/Header';
@@ -187,7 +187,7 @@ function App() {
                   <Route path="/presale" element={<Presale />} />
                   <Route path="/stats" element={<Statistics />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/imagetest" element={<SimpleImageTest />} />
+                  <Route path="/imagetest" element={<ImageTest />} />
                 </Routes>
               </main>
               <Footer />
