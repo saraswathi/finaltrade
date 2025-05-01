@@ -1,23 +1,19 @@
-// Handles image paths for consistent references across environments
-const getImagePath = (imageName) => {
-  // In production, use PUBLIC_URL which includes the repository name
-  if (process.env.NODE_ENV === 'production') {
-    return `${process.env.PUBLIC_URL}/assets/images/${imageName}`;
-  }
-  // Use relative path for development
-  return `/assets/images/${imageName}`;
+// src/utils/imagePaths.js
+const basePath = process.env.PUBLIC_URL || '';
+
+export const IMAGES = {
+  background: `${basePath}/assets/images/neon_hum.png`,
+  toedLogo: `${basePath}/assets/images/toed-logo.png`,
+  mnrchLogo: `${basePath}/assets/images/mnrch-logo.png`,
+  monarch: `${basePath}/assets/images/monarch.png`,
+  sloth: `${basePath}/assets/images/sloth.png`,
+  neonHum: `${basePath}/assets/images/neon_hum.png`,
+  solarArena: `${basePath}/assets/images/Solar_Cyber_Arena.png`,
+  logo: `${basePath}/assets/images/final_trade_logo.png`,
 };
 
-// Export specific image paths for easy access
-export const IMAGES = {
-  background: getImagePath('neon_hum.png'), // Changed to neon_hum.png as the main background
-  toedLogo: getImagePath('toed-logo.png'),
-  mnrchLogo: getImagePath('mnrch-logo.png'),
-  monarch: getImagePath('monarch.png'),
-  sloth: getImagePath('sloth.png'),
-  neonHum: getImagePath('neon_hum.png'),
-  solarArena: getImagePath('Solar_Cyber_Arena.png'),
-  logo: getImagePath('final_trade_logo.png'),
+const getImagePath = (imageName) => {
+  return `${basePath}/assets/images/${imageName}`;
 };
 
 export default getImagePath;

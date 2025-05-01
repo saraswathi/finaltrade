@@ -1,6 +1,5 @@
 // src/pages/Home.js
 import React from 'react';
-import { IMAGES } from '../utils/imagePaths';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid, Card, Box, Typography, Button, Divider } from '@mui/material';
 import PageContainer from '../components/common/PageContainer';
@@ -19,7 +18,7 @@ const Home = () => {
   };
 
   return (
-    <PageContainer backgroundImage={IMAGES.solarArena}>
+    <PageContainer backgroundImage="Solar_Cyber_Arena.png">
       <Container maxWidth="lg">
         <Box textAlign="center" mb={8} mt={4}>
           <Typography 
@@ -118,7 +117,7 @@ const Home = () => {
             >
               <Box sx={{ p: 4, textAlign: 'center' }}>
                 <img 
-                  src={IMAGES.monarch} 
+                  src={`${process.env.PUBLIC_URL}/assets/images/monarch.png`} 
                   alt="Monarch Butterfly" 
                   style={{ 
                     height: 180, 
@@ -214,7 +213,7 @@ const Home = () => {
             >
               <Box sx={{ p: 4, textAlign: 'center' }}>
                 <img 
-                  src={IMAGES.sloth}
+                  src={`${process.env.PUBLIC_URL}/assets/images/sloth.png`} 
                   alt="Three-toed Sloth" 
                   style={{ 
                     height: 180, 

@@ -35,7 +35,8 @@ const BattleContainer = styled(Box)(({ theme }) => ({
   height: '100vh',
   width: '100%',
   overflow: 'hidden',
-  backgroundImage: `url(${IMAGES.neonHum})`,  backgroundSize: 'cover',
+  backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/neon_hum.png)`,
+  backgroundSize: 'cover',
   backgroundPosition: 'bottom center',
   '&::before': { // Dark overlay for depth
     content: '""',
@@ -1101,7 +1102,7 @@ const Battle = () => {
           sx={{ position: 'absolute', left: isMobile ? '15%' : '25%', bottom: '8%' }}
         >
           <img 
-            src={IMAGES.sloth}
+            src={`${process.env.PUBLIC_URL}/assets/images/sloth.png`} 
             alt="Sloth" 
             style={{ 
               height: getCharacterSize(),
@@ -1164,7 +1165,7 @@ const Battle = () => {
           sx={{ position: 'absolute', right: isMobile ? '15%' : '25%', bottom: '8%' }}
         >
           <img 
-            src={IMAGES.monarch}
+            src={`${process.env.PUBLIC_URL}/assets/images/monarch.png`} 
             alt="Monarch" 
             style={{ 
               height: getCharacterSize(),

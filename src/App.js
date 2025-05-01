@@ -262,27 +262,15 @@ const cyberpunkTheme = createTheme({
     },
     MuiCssBaseline: {
       styleOverrides: {
-        body: {
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#00FFF7 #070b34',
-          '&::-webkit-scrollbar': {
-            width: '8px',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#070b34',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#00FFF7',
-            borderRadius: '4px',
-          },
-          backgroundColor: '#070b34',
-          backgroundImage: `url(${IMAGES.neonHum})`, // Using neon_hum.png from your IMAGES object
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          backgroundRepeat: 'no-repeat',
-          fontFamily: "'Manrope', 'Satoshi', sans-serif",
-        }
+        // In MuiCssBaseline styleOverrides
+body: {
+  // Other properties...
+  backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/neon_hum.png)`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundAttachment: 'fixed',
+  // etc.
+}
       }
     },
     MuiLinearProgress: {
