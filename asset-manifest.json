@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/finaltrade/static/css/main.55baa6b4.css",
-    "main.js": "/finaltrade/static/js/main.8bbef6c4.js",
+    "main.js": "/finaltrade/static/js/main.d51bdf30.js",
     "static/media/final_trade_logo.png": "/finaltrade/static/media/final_trade_logo.b34905537b32358992ca.png",
     "index.html": "/finaltrade/index.html",
     "main.55baa6b4.css.map": "/finaltrade/static/css/main.55baa6b4.css.map",
-    "main.8bbef6c4.js.map": "/finaltrade/static/js/main.8bbef6c4.js.map"
+    "main.d51bdf30.js.map": "/finaltrade/static/js/main.d51bdf30.js.map"
   },
   "entrypoints": [
     "static/css/main.55baa6b4.css",
-    "static/js/main.8bbef6c4.js"
+    "static/js/main.d51bdf30.js"
   ]
 }
