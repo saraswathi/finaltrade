@@ -18,6 +18,9 @@ import Profile from './pages/Profile';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 
+// Import the image path utilities
+import { IMAGES } from './utils/imagePaths';
+
 // Create a cyberpunk theme instance with enhanced colors and styling
 const cyberpunkTheme = createTheme({
   palette: {
@@ -273,8 +276,11 @@ const cyberpunkTheme = createTheme({
             borderRadius: '4px',
           },
           backgroundColor: '#070b34',
-          backgroundImage: 'radial-gradient(circle at 50% 50%, #12194f, #070b34 70%)',
+          backgroundImage: `url(${IMAGES.neonHum})`, // Using neon_hum.png from your IMAGES object
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat',
           fontFamily: "'Manrope', 'Satoshi', sans-serif",
         }
       }

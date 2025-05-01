@@ -5,7 +5,7 @@ const PageContainer = ({ backgroundImage, children, overlay = true }) => {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/${backgroundImage})`,
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
