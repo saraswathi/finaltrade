@@ -1,283 +1,552 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
-import DexScreenerService from '../services/DexScreenerService';
-import GameMechanicsService from '../services/GameMechanicsService';
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import TOKEN_CONFIG from '../config/tokenConfig';
+import PLAYER_PROFILES, { DEFAULT_PROFILE, calculateMomentumTier, getTradeImpact } from '../config/playerProfiles';
+import CoinGeckoService from '../services/CoinGeckoService';
+import GameMechanicsService from '../services/GameMechanicsService';
+import marketScenarios from '../data/marketScenarios.json';
+import marketPopups from '../data/final_trade_popups.json';
 
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  // State for token market data
-  const [tokenData, setTokenData] = useState({
-    [TOKEN_CONFIG.species1.id]: {
-      price: 0.15,
-      priceChange: 2.5,
-      volume: 125000,
-      marketCap: 750000,
-      volatility: 0.35,
-    },
-    [TOKEN_CONFIG.species2.id]: {
-      price: 2.75,
-      priceChange: -1.2,
-      volume: 350000,
-      marketCap: 450000,
-      volatility: 0.25,
-    }
+  // Game state
+  const [gameState, setGameState] = useState('idle'); // idle, playing, ended
+  const [currentRound, setCurrentRound] = useState(0);
+  const [roundTimer, setRoundTimer] = useState(TOKEN_CONFIG.game.countdownStart);
+  const [marketMode, setMarketMode] = useState('launch'); // launch, neutral, divergence, live
+  
+  // Player state
+  const [playerProfile, setPlayerProfile] = useState(DEFAULT_PROFILE);
+  const [playerSide, setPlayerSide] = useState(null); // which token player is backing
+  const [playerWallet, setPlayerWallet] = useState({
+    ETH: DEFAULT_PROFILE.balances.ETH,
+    FINAL: DEFAULT_PROFILE.balances.FINAL,
+    '3TOED': DEFAULT_PROFILE.balances['3TOED'],
+    'MNRCH': DEFAULT_PROFILE.balances['MNRCH']
   });
   
-  // Health scores
-  const [healthScores, setHealthScores] = useState({
-    [TOKEN_CONFIG.species1.id]: 65,
-    [TOKEN_CONFIG.species2.id]: 45
+  // Battle state
+  const [fighterHP, setFighterHP] = useState({
+    '3TOED': TOKEN_CONFIG.game.startingHP,
+    'MNRCH': TOKEN_CONFIG.game.startingHP
   });
   
-  // Current moves
+  const [momentum, setMomentum] = useState({
+    '3TOED': 0,
+    'MNRCH': 0
+  });
+  
   const [currentMoves, setCurrentMoves] = useState({
-    [TOKEN_CONFIG.species1.id]: null,
-    [TOKEN_CONFIG.species2.id]: null
+    '3TOED': null,
+    'MNRCH': null
   });
   
-  // Battle log
-  const [battleLogs, setBattleLogs] = useState([
-    { message: `Battle started! ${TOKEN_CONFIG.species1.symbol} vs ${TOKEN_CONFIG.species2.symbol}`, timestamp: new Date().toLocaleTimeString(), type: 'event' }
-  ]);
+  const [battleLog, setBattleLog] = useState([]);
+  const [marketCommentary, setMarketCommentary] = useState(null);
   
-  // Loading state
-  const [loading, setLoading] = useState(false);
+  // Market data
+  const [marketData, setMarketData] = useState({
+    PEPE: { price: 0, change: 0, volume: 0 },
+    DOGE: { price: 0, change: 0, volume: 0 },
+    ARB: { price: 0, change: 0, volume: 0 }
+  });
   
-  // Auto update toggle
-  const [autoUpdate, setAutoUpdate] = useState(false);
+  // Refs for intervals
+  const roundIntervalRef = useRef(null);
+  const minorMoveTimeoutRef = useRef(null);
   
-  // Use mock data for testing
-  const [useMockData, setUseMockData] = useState(true);
+  // Helper function to get random popup message
+  const getRandomPopup = (category) => {
+    const messages = marketPopups.popups[category];
+    if (!messages || messages.length === 0) return null;
+    return messages[Math.floor(Math.random() * messages.length)];
+  };
   
-  // Fetch token data from API
-  const fetchTokenData = useCallback(async () => {
-    setLoading(true);
-    
-    try {
-      // If using mock data, generate random values
-      if (useMockData) {
-        setTokenData(prev => ({
-          [TOKEN_CONFIG.species1.id]: {
-            price: prev[TOKEN_CONFIG.species1.id].price * (1 + (Math.random() * 0.1 - 0.05)),
-            priceChange: Math.min(30, Math.max(-30, prev[TOKEN_CONFIG.species1.id].priceChange + (Math.random() * 6 - 3))),
-            volume: prev[TOKEN_CONFIG.species1.id].volume * (1 + (Math.random() * 0.2 - 0.1)),
-            marketCap: prev[TOKEN_CONFIG.species1.id].marketCap * (1 + (Math.random() * 0.1 - 0.05)),
-            volatility: Math.min(1, Math.max(0, Math.random() * 0.5 + 0.3))
-          },
-          [TOKEN_CONFIG.species2.id]: {
-            price: prev[TOKEN_CONFIG.species2.id].price * (1 + (Math.random() * 0.05 - 0.025)),
-            priceChange: Math.min(30, Math.max(-30, prev[TOKEN_CONFIG.species2.id].priceChange + (Math.random() * 4 - 2))),
-            volume: prev[TOKEN_CONFIG.species2.id].volume * (1 + (Math.random() * 0.15 - 0.075)),
-            marketCap: prev[TOKEN_CONFIG.species2.id].marketCap * (1 + (Math.random() * 0.08 - 0.04)),
-            volatility: Math.min(1, Math.max(0, Math.random() * 0.4 + 0.2))
-          }
-        }));
-      } else {
-        // Fetch real data from DexScreener
-        const species1Response = await DexScreenerService.fetchPairData(
-          TOKEN_CONFIG.species1.chain, 
-          TOKEN_CONFIG.species1.pairAddress
-        );
-        
-        const species2Response = await DexScreenerService.fetchPairData(
-          TOKEN_CONFIG.species2.chain, 
-          TOKEN_CONFIG.species2.pairAddress
-        );
-        
-        if (species1Response?.pairs?.[0] && species2Response?.pairs?.[0]) {
-          // Process species 1 data
-          const species1Pair = species1Response.pairs[0];
-          const species1Volatility = DexScreenerService.calculateVolatility(TOKEN_CONFIG.species1.id);
-          
-          // Process species 2 data
-          const species2Pair = species2Response.pairs[0];
-          const species2Volatility = DexScreenerService.calculateVolatility(TOKEN_CONFIG.species2.id);
-          
-          // Update token data state
-          setTokenData({
-            [TOKEN_CONFIG.species1.id]: {
-              price: parseFloat(species1Pair.priceUsd),
-              priceChange: parseFloat(species1Pair.priceChange.h1),
-              volume: parseFloat(species1Pair.volume.h24),
-              marketCap: parseFloat(species1Pair.fdv || species1Pair.liquidity.usd * 2),
-              volatility: species1Volatility
-            },
-            [TOKEN_CONFIG.species2.id]: {
-              price: parseFloat(species2Pair.priceUsd),
-              priceChange: parseFloat(species2Pair.priceChange.h1),
-              volume: parseFloat(species2Pair.volume.h24),
-              marketCap: parseFloat(species2Pair.fdv || species2Pair.liquidity.usd * 2),
-              volatility: species2Volatility
-            }
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching token data:", error);
-    } finally {
-      setLoading(false);
+  // Check if player has enough $FINAL to play
+  const canPlay = useCallback(() => {
+    return playerWallet.FINAL >= TOKEN_CONFIG.finalToken.gateAmount;
+  }, [playerWallet.FINAL]);
+  
+  // Start a new game
+  const startGame = useCallback(async () => {
+    if (!canPlay()) {
+      setMarketCommentary("You need at least 50 $FINAL to play!");
+      return false;
     }
-  }, [useMockData]);
-  
-  // Process market data into game state
-  const processMarketData = useCallback(() => {
-    // Calculate health scores
-    const species1Health = GameMechanicsService.calculateHealthScore(tokenData[TOKEN_CONFIG.species1.id]);
-    const species2Health = GameMechanicsService.calculateHealthScore(tokenData[TOKEN_CONFIG.species2.id]);
     
-    setHealthScores({
-      [TOKEN_CONFIG.species1.id]: species1Health,
-      [TOKEN_CONFIG.species2.id]: species2Health
+    setGameState('playing');
+    setCurrentRound(1);
+    setRoundTimer(TOKEN_CONFIG.game.countdownStart);
+    setFighterHP({
+      '3TOED': TOKEN_CONFIG.game.startingHP,
+      'MNRCH': TOKEN_CONFIG.game.startingHP
     });
+    setMomentum({ '3TOED': 0, 'MNRCH': 0 });
     
-    // Determine moves based on metrics
-    const species1Move = GameMechanicsService.determineMoveFromMetrics(tokenData[TOKEN_CONFIG.species1.id]);
-    const species2Move = GameMechanicsService.determineMoveFromMetrics(tokenData[TOKEN_CONFIG.species2.id]);
+    // Initial market commentary
+    const startMessage = getRandomPopup('round_pacing');
+    setBattleLog([{
+      timestamp: Date.now(),
+      message: "Battle begins! 3TOED vs MNRCH!",
+      type: 'start'
+    }]);
     
-    // Only update moves if they've changed
-    if (species1Move.moveId && (!currentMoves[TOKEN_CONFIG.species1.id] || 
-        species1Move.moveId !== currentMoves[TOKEN_CONFIG.species1.id]?.moveId)) {
-      
-      setCurrentMoves(prev => ({
-        ...prev,
-        [TOKEN_CONFIG.species1.id]: species1Move
-      }));
-      
-      // Add to battle log
-      setBattleLogs(prev => [
-        { 
-          message: `${TOKEN_CONFIG.species1.symbol} performs ${species1Move.moveId}: ${species1Move.name}!`, 
-          timestamp: new Date().toLocaleTimeString(), 
-          type: 'attack' 
-        },
-        ...prev
-      ]);
+    if (startMessage) {
+      setMarketCommentary(startMessage);
     }
     
-    if (species2Move.moveId && (!currentMoves[TOKEN_CONFIG.species2.id] || 
-        species2Move.moveId !== currentMoves[TOKEN_CONFIG.species2.id]?.moveId)) {
-      
-      setCurrentMoves(prev => ({
-        ...prev,
-        [TOKEN_CONFIG.species2.id]: species2Move
-      }));
-      
-      // Add to battle log
-      setBattleLogs(prev => [
-        { 
-          message: `${TOKEN_CONFIG.species2.symbol} performs ${species2Move.moveId}: ${species2Move.name}!`, 
-          timestamp: new Date().toLocaleTimeString(), 
-          type: 'attack' 
-        },
-        ...prev
-      ]);
+    // Fetch initial market data
+    if (marketMode === 'live') {
+      await fetchLiveMarketData();
+    } else {
+      // Load scenario data
+      loadScenarioData();
     }
     
-    // Check for victory conditions
-    if (tokenData[TOKEN_CONFIG.species1.id].marketCap >= 1000000 && 
-        !battleLogs.some(log => log.message.includes(`${TOKEN_CONFIG.species1.symbol} WINS!`))) {
-      
-      setBattleLogs(prev => [
-        { 
-          message: `${TOKEN_CONFIG.species1.symbol} WINS! Market cap reached $1,000,000!`, 
-          timestamp: new Date().toLocaleTimeString(), 
-          type: 'event' 
-        },
-        ...prev
-      ]);
-    }
+    // Start round timer
+    startRoundTimer();
     
-    if (tokenData[TOKEN_CONFIG.species2.id].marketCap >= 1000000 && 
-        !battleLogs.some(log => log.message.includes(`${TOKEN_CONFIG.species2.symbol} WINS!`))) {
-      
-      setBattleLogs(prev => [
-        { 
-          message: `${TOKEN_CONFIG.species2.symbol} WINS! Market cap reached $1,000,000!`, 
-          timestamp: new Date().toLocaleTimeString(), 
-          type: 'event' 
-        },
-        ...prev
-      ]);
-    }
-  }, [tokenData, currentMoves, battleLogs]);
+    return true;
+  }, [canPlay, marketMode]);
   
-  // Handle market actions (buy/sell)
-  const handleMarketAction = useCallback((action, tokenId, amount) => {
-    // Update token data based on action
-    setTokenData(prev => {
-      const updatedData = { ...prev };
-      
-      if (action === 'buy') {
-        // Buying increases price, volume, and potentially market cap
-        updatedData[tokenId] = {
-          ...updatedData[tokenId],
-          price: updatedData[tokenId].price * (1 + (amount / 10000)),
-          priceChange: updatedData[tokenId].priceChange + (amount / 100),
-          volume: updatedData[tokenId].volume + amount,
-          marketCap: updatedData[tokenId].marketCap + (amount * 2)
-        };
-      } else {
-        // Selling decreases price, increases volume and volatility
-        updatedData[tokenId] = {
-          ...updatedData[tokenId],
-          price: updatedData[tokenId].price * (1 - (amount / 10000)),
-          priceChange: updatedData[tokenId].priceChange - (amount / 100),
-          volume: updatedData[tokenId].volume + amount,
-          marketCap: Math.max(0, updatedData[tokenId].marketCap - (amount * 2)),
-          volatility: Math.min(1, updatedData[tokenId].volatility + (amount / 10000))
-        };
-      }
-      
-      return updatedData;
-    });
+  // Load scenario market data
+  const loadScenarioData = useCallback(() => {
+    // Check if marketScenarios structure exists
+    if (!marketScenarios || !marketScenarios.scenarios) {
+      console.error('Market scenarios not loaded properly');
+      return;
+    }
     
-    // Add to battle log
-    const tokenSymbol = tokenId === TOKEN_CONFIG.species1.id ? 
-      TOKEN_CONFIG.species1.symbol : TOKEN_CONFIG.species2.symbol;
-      
-    setBattleLogs(prev => [
-      { 
-        message: `${action.toUpperCase()} $${amount} of ${tokenSymbol}`, 
-        timestamp: new Date().toLocaleTimeString(), 
-        type: action === 'buy' ? 'buff' : 'attack'
+    const scenario = marketScenarios.scenarios[marketMode];
+    if (!scenario || !scenario.rounds) {
+      console.error(`No scenario found for mode: ${marketMode}`);
+      return;
+    }
+    
+    const roundIndex = Math.max(0, currentRound - 1);
+    const roundData = scenario.rounds[roundIndex] || scenario.rounds[0];
+    
+    if (!roundData) {
+      console.error('No round data available');
+      return;
+    }
+    
+    setMarketData({
+      PEPE: { 
+        price: 0.00001, // Mock price
+        change: roundData.PEPE?.priceChange || 0,
+        volume: roundData.PEPE?.volume || 0
       },
-      ...prev
-    ]);
+      DOGE: {
+        price: 0.08,
+        change: roundData.DOGE?.priceChange || 0,
+        volume: roundData.DOGE?.volume || 0
+      }
+    });
+    
+    // Generate market commentary based on data
+    if (Math.abs(roundData.PEPE?.priceChange || 0) > 5 || Math.abs(roundData.DOGE?.priceChange || 0) > 5) {
+      setMarketCommentary(getRandomPopup('price_surge'));
+    } else if ((roundData.PEPE?.volume || 0) > 300000 || (roundData.DOGE?.volume || 0) > 500000) {
+      setMarketCommentary(getRandomPopup('volume_spike'));
+    }
+  }, [marketMode, currentRound]);
+  
+  // Round timer logic
+  const startRoundTimer = useCallback(() => {
+    if (roundIntervalRef.current) {
+      clearInterval(roundIntervalRef.current);
+    }
+    
+    roundIntervalRef.current = setInterval(() => {
+      setRoundTimer(prev => {
+        if (prev <= 1) {
+          // Round ends
+          processRoundEnd();
+          return TOKEN_CONFIG.game.countdownStart;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   }, []);
   
-  // Effect to update data periodically when auto-update is enabled
-  useEffect(() => {
-    let interval;
-    
-    if (autoUpdate) {
-      interval = setInterval(() => {
-        fetchTokenData();
-      }, 10000); // Update every 10 seconds
+  // Process round end
+  const processRoundEnd = useCallback(async () => {
+    // Load current round market data
+    if (marketMode !== 'live') {
+      loadScenarioData();
     }
     
-    return () => clearInterval(interval);
-  }, [autoUpdate, fetchTokenData]);
+    // Get market data for this round
+    const roundMarketData = await getRoundMarketData();
+    
+    // Calculate market tiers
+    const pepeTier = CoinGeckoService.getTierFromPriceChange(roundMarketData.PEPE.change);
+    const dogeTier = CoinGeckoService.getTierFromPriceChange(roundMarketData.DOGE.change);
+    
+    // Prepare round data
+    const roundData = {
+      sloth: {
+        marketTier: pepeTier,
+        momentum: momentum['3TOED'],
+        finalBalance: playerWallet.FINAL,
+        priceChange: roundMarketData.PEPE.change,
+        volume: roundMarketData.PEPE.volume
+      },
+      monarch: {
+        marketTier: dogeTier,
+        momentum: momentum['MNRCH'],
+        finalBalance: playerSide === 'MNRCH' ? playerWallet.FINAL : 50, // AI gets base amount
+        priceChange: roundMarketData.DOGE.change,
+        volume: roundMarketData.DOGE.volume
+      }
+    };
+    
+    // Determine outcome
+    const outcome = GameMechanicsService.determineRoundOutcome(roundData);
+    
+    // Apply damage
+    setFighterHP(prev => ({
+      ...prev,
+      [outcome.loser]: Math.max(0, prev[outcome.loser] - outcome.damage)
+    }));
+    
+    // Update battle log
+    setBattleLog(prev => [...prev, {
+      timestamp: Date.now(),
+      round: currentRound,
+      message: `${outcome.winner} lands ${outcome.majorMove.name}! ${outcome.damage} damage!`,
+      type: 'major',
+      move: outcome.majorMove,
+      outcome
+    }]);
+    
+    // Generate strength feedback
+    setMarketCommentary(getRandomPopup('strength_feedback'));
+    
+    // Set current major move for animation
+    setCurrentMoves(prev => ({
+      ...prev,
+      [outcome.winner]: {
+        ...outcome.majorMove,
+        type: 'major',
+        tier: outcome.damage
+      }
+    }));
+    
+    // Clear major move after animation
+    setTimeout(() => {
+      setCurrentMoves(prev => ({
+        ...prev,
+        [outcome.winner]: null
+      }));
+    }, TOKEN_CONFIG.game.moveAnimationDuration * 1000);
+    
+    // Reset momentum for next round
+    setMomentum({ '3TOED': 0, 'MNRCH': 0 });
+    
+    // Check for game end
+    const updatedHP = {
+      ...fighterHP,
+      [outcome.loser]: Math.max(0, fighterHP[outcome.loser] - outcome.damage)
+    };
+    
+    if (updatedHP['3TOED'] <= 0 || updatedHP['MNRCH'] <= 0) {
+      endGame(updatedHP['3TOED'] > 0 ? '3TOED' : 'MNRCH');
+    } else {
+      // Continue to next round
+      setCurrentRound(prev => prev + 1);
+      
+      // Round pacing message
+      setTimeout(() => {
+        setMarketCommentary(getRandomPopup('round_pacing'));
+      }, 3000);
+    }
+  }, [currentRound, momentum, playerWallet.FINAL, playerSide, fighterHP, marketMode]);
   
-  // Process market data whenever token data changes
+  // Get market data for current round
+  const getRoundMarketData = useCallback(async () => {
+    if (marketMode === 'live') {
+      // Fetch live data
+      const [pepeData, dogeData] = await Promise.all([
+        CoinGeckoService.getPriceChange('pepe', 30),
+        CoinGeckoService.getPriceChange('dogecoin', 30)
+      ]);
+      
+      return {
+        PEPE: { change: pepeData.changePercent, volume: pepeData.volume },
+        DOGE: { change: dogeData.changePercent, volume: dogeData.volume }
+      };
+    } else {
+      // Use pre-loaded scenario data
+      if (!marketScenarios || !marketScenarios.scenarios || !marketScenarios.scenarios[marketMode]) {
+        console.error('Market scenarios not properly loaded');
+        return {
+          PEPE: { change: 0, volume: 0 },
+          DOGE: { change: 0, volume: 0 }
+        };
+      }
+      
+      const scenario = marketScenarios.scenarios[marketMode];
+      const roundIndex = Math.max(0, currentRound - 1);
+      const roundData = scenario.rounds?.[roundIndex] || scenario.rounds?.[0] || {};
+      
+      return {
+        PEPE: { 
+          change: roundData.PEPE?.priceChange || 0, 
+          volume: roundData.PEPE?.volume || 0 
+        },
+        DOGE: { 
+          change: roundData.DOGE?.priceChange || 0, 
+          volume: roundData.DOGE?.volume || 0 
+        }
+      };
+    }
+  }, [marketMode, currentRound]);
+  
+  // Handle player trade
+  const executeTrade = useCallback((action, token, amount) => {
+    if (gameState !== 'playing' && token !== 'FINAL') return;
+    
+    // Special handling for FINAL token reload
+    if (token === 'FINAL' && action === 'buy') {
+      // ETH to FINAL conversion
+      const ethCost = amount * 0.1; // 10 FINAL per ETH
+      if (playerWallet.ETH < ethCost) {
+        setMarketCommentary("Insufficient ETH!");
+        return;
+      }
+      
+      setPlayerWallet(prev => ({
+        ...prev,
+        ETH: prev.ETH - ethCost,
+        FINAL: prev.FINAL + amount
+      }));
+      
+      setBattleLog(prev => [...prev, {
+        timestamp: Date.now(),
+        message: `Reloaded ${amount} $FINAL!`,
+        type: 'trade'
+      }]);
+      
+      // Check for regen
+      const regenHP = GameMechanicsService.calculateRegen(amount);
+      if (regenHP > 0 && playerSide) {
+        setFighterHP(prev => ({
+          ...prev,
+          [playerSide]: Math.min(TOKEN_CONFIG.game.startingHP, prev[playerSide] + regenHP)
+        }));
+        
+        setMarketCommentary(getRandomPopup('buff_trigger'));
+      }
+      
+      return;
+    }
+    
+    // Regular fighter token trades
+    if (action === 'buy') {
+      const finalCost = amount * 0.1; // 1 FINAL = 10 tokens
+      if (playerWallet.FINAL < finalCost) {
+        setMarketCommentary("Insufficient $FINAL!");
+        return;
+      }
+      
+      // Update wallet
+      setPlayerWallet(prev => ({
+        ...prev,
+        FINAL: prev.FINAL - finalCost,
+        [token]: prev[token] + amount
+      }));
+    } else {
+      if (playerWallet[token] < amount) {
+        setMarketCommentary("Insufficient tokens!");
+        return;
+      }
+      
+      // Update wallet
+      setPlayerWallet(prev => ({
+        ...prev,
+        FINAL: prev.FINAL + (amount * 0.1),
+        [token]: prev[token] - amount
+      }));
+    }
+    
+    // Process trade impact
+    const tradeResult = GameMechanicsService.processTrade({
+      fighter: token,
+      action,
+      amount,
+      playerProfile
+    });
+    
+    // Update momentum
+    setMomentum(prev => ({
+      ...prev,
+      [token]: Math.min(5, prev[token] + tradeResult.momentumGained)
+    }));
+    
+    // Show minor move
+    setCurrentMoves(prev => ({
+      ...prev,
+      [token]: {
+        ...tradeResult.minorMove,
+        type: 'momentum',
+        direction: action === 'buy' ? 'up' : 'down'
+      }
+    }));
+    
+    // Clear minor move after short duration
+    if (minorMoveTimeoutRef.current) {
+      clearTimeout(minorMoveTimeoutRef.current);
+    }
+    
+    minorMoveTimeoutRef.current = setTimeout(() => {
+      setCurrentMoves(prev => ({
+        ...prev,
+        [token]: null
+      }));
+    }, TOKEN_CONFIG.game.minorMoveCooldown * 1000);
+    
+    // Add to battle log
+    setBattleLog(prev => [...prev, {
+      timestamp: Date.now(),
+      message: `${action.toUpperCase()} ${amount} ${token}!`,
+      type: 'trade',
+      minor: tradeResult.minorMove
+    }]);
+    
+    // Update commentary
+    setMarketCommentary(getRandomPopup('player_input'));
+  }, [gameState, playerWallet, playerProfile, playerSide]);
+  
+  // Buy $FINAL with ETH
+  const buyFinal = useCallback((ethAmount) => {
+    const finalAmount = ethAmount * 10; // Simplified exchange rate
+    
+    if (playerWallet.ETH < ethAmount) {
+      setMarketCommentary("Insufficient ETH!");
+      return false;
+    }
+    
+    setPlayerWallet(prev => ({
+      ...prev,
+      ETH: prev.ETH - ethAmount,
+      FINAL: prev.FINAL + finalAmount
+    }));
+    
+    // Check for regen
+    const regenHP = GameMechanicsService.calculateRegen(finalAmount);
+    if (regenHP > 0 && playerSide) {
+      setFighterHP(prev => ({
+        ...prev,
+        [playerSide]: Math.min(TOKEN_CONFIG.game.startingHP, prev[playerSide] + regenHP)
+      }));
+      
+      setMarketCommentary(getRandomPopup('buff_trigger'));
+    }
+    
+    return true;
+  }, [playerWallet.ETH, playerSide]);
+  
+  // End game
+  const endGame = useCallback((winner) => {
+    setGameState('ended');
+    
+    if (roundIntervalRef.current) {
+      clearInterval(roundIntervalRef.current);
+    }
+    
+    setBattleLog(prev => [...prev, {
+      timestamp: Date.now(),
+      message: `${winner} WINS!`,
+      type: 'end',
+      winner
+    }]);
+    
+    setMarketCommentary(`GAME OVER! ${winner} emerges victorious!`);
+  }, []);
+  
+  // Fetch live market data
+  const fetchLiveMarketData = useCallback(async () => {
+    try {
+      const prices = await CoinGeckoService.getCurrentPrices(['pepe', 'dogecoin', 'arbitrum']);
+      
+      setMarketData({
+        PEPE: {
+          price: prices.pepe?.usd || 0,
+          change: prices.pepe?.usd_24h_change || 0,
+          volume: prices.pepe?.usd_24h_vol || 0
+        },
+        DOGE: {
+          price: prices.dogecoin?.usd || 0,
+          change: prices.dogecoin?.usd_24h_change || 0,
+          volume: prices.dogecoin?.usd_24h_vol || 0
+        },
+        ARB: {
+          price: prices.arbitrum?.usd || 0,
+          change: prices.arbitrum?.usd_24h_change || 0,
+          volume: prices.arbitrum?.usd_24h_vol || 0
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching market data:', error);
+    }
+  }, []);
+  
+  // Load market data when round changes
   useEffect(() => {
-    processMarketData();
-  }, [tokenData, processMarketData]);
+    if (gameState === 'playing' && currentRound > 0) {
+      loadScenarioData();
+    }
+  }, [currentRound, gameState, loadScenarioData]);
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (roundIntervalRef.current) {
+        clearInterval(roundIntervalRef.current);
+      }
+      if (minorMoveTimeoutRef.current) {
+        clearTimeout(minorMoveTimeoutRef.current);
+      }
+    };
+  }, []);
   
   return (
     <GameContext.Provider value={{
-      tokenConfig: TOKEN_CONFIG,
-      tokenData,
-      healthScores,
+      // Game state
+      gameState,
+      currentRound,
+      roundTimer,
+      marketMode,
+      setMarketMode,
+      
+      // Player state
+      playerProfile,
+      setPlayerProfile,
+      playerSide,
+      setPlayerSide,
+      playerWallet,
+      
+      // Battle state
+      fighterHP,
+      momentum,
       currentMoves,
-      battleLogs,
-      loading,
-      autoUpdate,
-      setAutoUpdate,
-      useMockData,
-      setUseMockData,
-      fetchTokenData,
-      handleMarketAction
+      battleLog,
+      marketCommentary,
+      
+      // Market data
+      marketData,
+      
+      // Actions
+      canPlay,
+      startGame,
+      executeTrade,
+      buyFinal,
+      
+      // Config
+      tokenConfig: TOKEN_CONFIG,
+      playerProfiles: PLAYER_PROFILES
     }}>
       {children}
     </GameContext.Provider>

@@ -1,0 +1,118 @@
+{
+  "sloth": [
+    {
+      "id": "glypho_burn",
+      "name": "Glypho-Burn",
+      "description": "Dousing MNRCH with agrochemicals from a glyphosate tank.",
+      "mossmouth": "The soil recoils. The canopy withers.",
+      "crankshaft": "Monsanto’s mascot just torched your metamorphosis!",
+      "image_id": "sloth_major_1.png"
+    },
+    {
+      "id": "clearcut_combo",
+      "name": "Clearcut Combo",
+      "description": "A demolition kick that razes ecosystems.",
+      "mossmouth": "Roots scream. The understory falls silent.",
+      "crankshaft": "Timberrrr! 3TOED just evicted an entire biome!",
+      "image_id": "sloth_major_2.png"
+    },
+    {
+      "id": "fire_palm",
+      "name": "Fire Palm",
+      "description": "A fiery haymaker fueled by dry season fury.",
+      "mossmouth": "Leaffall ignites. The blaze feeds.",
+      "crankshaft": "Who gave 3TOED fire hands?! MNRCH’s singed!",
+      "image_id": "sloth_major_3.png"
+    },
+    {
+      "id": "pollinators_end",
+      "name": "Pollinator’s End",
+      "description": "Targeted hits that turn blooms into bruises.",
+      "mossmouth": "Petals fall. Pollination halts midflight.",
+      "crankshaft": "He’s stomping spring! 3TOED’s got anti-flower fists!",
+      "image_id": "sloth_major_4.png"
+    },
+    {
+      "id": "eco_trap",
+      "name": "Eco Trap",
+      "description": "A mystic field snaps shut, draining MNRCH’s chi.",
+      "mossmouth": "The web tightens. Energy folds inward.",
+      "crankshaft": "He just reversed the ritual! MNRCH’s buzz is cooked!",
+      "image_id": "sloth_major_5.png"
+    },
+    {
+      "id": "smogspike",
+      "name": "Smogspike",
+      "description": "A burst from deep earth pressure and fossil rage.",
+      "mossmouth": "The ancient dark erupts. Breath chokes.",
+      "crankshaft": "He’s pumping sludge straight from Q4 earnings!",
+      "image_id": "sloth_major_6.png"
+    },
+    {
+      "id": "pipe_dream",
+      "name": "Pipe Dream",
+      "description": "A hallucinogenic wave of green rhetoric and false offset.",
+      "mossmouth": "Words drift like moss. Nothing changes.",
+      "crankshaft": "ESG smokescreen deployed! 3TOED’s blowing carbon credit dreams!",
+      "image_id": "sloth_major_7.png"
+    }
+  ],
+  "monarch": [
+    {
+      "id": "plastic_tsunami",
+      "name": "Plastic Tsunami",
+      "description": "A wave of synthetic waste slams into 3TOED, channeling the plastic tide of overconsumption.",
+      "mossmouth": "The ocean heaves. Plastiglomerate churns beneath his wings.",
+      "crankshaft": "Straight from the landfill buffet — MNRCH drowns him in debris!",
+      "image_id": "monarch_major_1.png"
+    },
+    {
+      "id": "cable_coil",
+      "name": "Cable Coil",
+      "description": "Dark loops of extraction grip tight — the grid takes its toll.",
+      "mossmouth": "Wires twist like vines long dead. The forest forgets its name.",
+      "crankshaft": "He’s rerouting the entire power grid through 3TOED’s skull!",
+      "image_id": "monarch_major_2.png"
+    },
+    {
+      "id": "psy_optic_blast",
+      "name": "Psy-Optic Blast",
+      "description": "Weaponized enlightenment fractures 3TOED’s perception.",
+      "mossmouth": "Patterns bloom, fractal and cruel.",
+      "crankshaft": "Oooh! Spiritual rugpull! MNRCH’s dosing dirty!",
+      "image_id": "monarch_major_3.png"
+    },
+    {
+      "id": "neon_uppercut",
+      "name": "Neon Uppercut",
+      "description": "A high-frequency volatility uppercut — no warning, just flash.",
+      "mossmouth": "A flash — neon fireflies flicker out.",
+      "crankshaft": "That’s a bullish candle to the jaw!",
+      "image_id": "monarch_major_4.png"
+    },
+    {
+      "id": "weather_bomb",
+      "name": "Weather Bomb",
+      "description": "A climate chaos orb strikes with the wrath of unbalanced systems.",
+      "mossmouth": "Clouds fracture. The planet exhales its fever.",
+      "crankshaft": "That’s not weather — that’s climate liquidation!",
+      "image_id": "monarch_major_5.png"
+    },
+    {
+      "id": "mandible_kick",
+      "name": "Mandible Kick",
+      "description": "Momentum burst sends MNRCH foot-first into the fight.",
+      "mossmouth": "Wings pulse. The air fractures.",
+      "crankshaft": "He boots in full risk-on mode! MNRCH’s going vertical!",
+      "image_id": "monarch_major_6.png"
+    },
+    {
+      "id": "insecticide_drip",
+      "name": "Insecticide Drip",
+      "description": "Drips toxins from his own wings, turning defense into attack.",
+      "mossmouth": "The nectar is poisoned. The hive hums no more.",
+      "crankshaft": "Forget the spray — MNRCH’s built-in biohazard!",
+      "image_id": "monarch_major_7.png"
+    }
+  ]
+}

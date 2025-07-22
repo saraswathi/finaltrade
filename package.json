@@ -1,7 +1,6 @@
 {
   "name": "final-trade",
   "version": "1.0.0",
-  "homepage": "https://saraswathi.github.io/finaltrade",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",

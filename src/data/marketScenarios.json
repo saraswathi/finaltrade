@@ -1,0 +1,259 @@
+{
+  "scenarios": {
+    "volatile": {
+      "id": "volatile",
+      "name": "🚀 Launch Volatility",
+      "description": "Wild price swings typical of token launches",
+      "rounds": [
+        {
+          "round": 1,
+          "PEPE": {
+            "priceChange": 5.2,
+            "volume": 2500000,
+            "description": "PEPE rockets on launch hype"
+          },
+          "DOGE": {
+            "priceChange": -2.1,
+            "volume": 1800000,
+            "description": "DOGE dips as attention shifts"
+          }
+        },
+        {
+          "round": 2,
+          "PEPE": {
+            "priceChange": -3.8,
+            "volume": 3200000,
+            "description": "First sell wave hits PEPE"
+          },
+          "DOGE": {
+            "priceChange": 1.5,
+            "volume": 2100000,
+            "description": "DOGE finds support"
+          }
+        },
+        {
+          "round": 3,
+          "PEPE": {
+            "priceChange": 8.9,
+            "volume": 4500000,
+            "description": "PEPE pumps on whale entry"
+          },
+          "DOGE": {
+            "priceChange": 0.3,
+            "volume": 1900000,
+            "description": "DOGE consolidates"
+          }
+        },
+        {
+          "round": 4,
+          "PEPE": {
+            "priceChange": -6.2,
+            "volume": 5100000,
+            "description": "Profit taking on PEPE"
+          },
+          "DOGE": {
+            "priceChange": 3.7,
+            "volume": 2800000,
+            "description": "DOGE breakout begins"
+          }
+        },
+        {
+          "round": 5,
+          "PEPE": {
+            "priceChange": 2.1,
+            "volume": 3800000,
+            "description": "PEPE stabilizing"
+          },
+          "DOGE": {
+            "priceChange": 5.5,
+            "volume": 3500000,
+            "description": "DOGE momentum builds"
+          }
+        },
+        {
+          "round": 6,
+          "PEPE": {
+            "priceChange": -1.2,
+            "volume": 2900000,
+            "description": "PEPE cooling off"
+          },
+          "DOGE": {
+            "priceChange": 7.8,
+            "volume": 4200000,
+            "description": "DOGE goes parabolic"
+          }
+        }
+      ]
+    },
+    "neutral": {
+      "id": "neutral",
+      "name": "🌊 Rangebound Neutral",
+      "description": "Steady trading with small movements",
+      "rounds": [
+        {
+          "round": 1,
+          "PEPE": {
+            "priceChange": 0.4,
+            "volume": 1200000,
+            "description": "PEPE trades sideways"
+          },
+          "DOGE": {
+            "priceChange": -0.2,
+            "volume": 1500000,
+            "description": "DOGE in tight range"
+          }
+        },
+        {
+          "round": 2,
+          "PEPE": {
+            "priceChange": -0.3,
+            "volume": 1100000,
+            "description": "PEPE minor dip"
+          },
+          "DOGE": {
+            "priceChange": 0.5,
+            "volume": 1400000,
+            "description": "DOGE slight uptick"
+          }
+        },
+        {
+          "round": 3,
+          "PEPE": {
+            "priceChange": 0.6,
+            "volume": 1300000,
+            "description": "PEPE finds bid"
+          },
+          "DOGE": {
+            "priceChange": 0.1,
+            "volume": 1600000,
+            "description": "DOGE flat"
+          }
+        },
+        {
+          "round": 4,
+          "PEPE": {
+            "priceChange": -0.5,
+            "volume": 1250000,
+            "description": "PEPE gives back gains"
+          },
+          "DOGE": {
+            "priceChange": -0.4,
+            "volume": 1550000,
+            "description": "DOGE tests support"
+          }
+        },
+        {
+          "round": 5,
+          "PEPE": {
+            "priceChange": 0.3,
+            "volume": 1180000,
+            "description": "PEPE bounces"
+          },
+          "DOGE": {
+            "priceChange": 0.2,
+            "volume": 1480000,
+            "description": "DOGE recovers"
+          }
+        },
+        {
+          "round": 6,
+          "PEPE": {
+            "priceChange": 0.1,
+            "volume": 1220000,
+            "description": "PEPE equilibrium"
+          },
+          "DOGE": {
+            "priceChange": -0.1,
+            "volume": 1520000,
+            "description": "DOGE unchanged"
+          }
+        }
+      ]
+    },
+    "divergent": {
+      "id": "divergent",
+      "name": "⚡ Divergence Mode",
+      "description": "Tokens moving in opposite directions",
+      "rounds": [
+        {
+          "round": 1,
+          "PEPE": {
+            "priceChange": 2.5,
+            "volume": 2000000,
+            "description": "PEPE breaks upward"
+          },
+          "DOGE": {
+            "priceChange": -2.8,
+            "volume": 2200000,
+            "description": "DOGE breaks down"
+          }
+        },
+        {
+          "round": 2,
+          "PEPE": {
+            "priceChange": 3.1,
+            "volume": 2400000,
+            "description": "PEPE continues climb"
+          },
+          "DOGE": {
+            "priceChange": -3.5,
+            "volume": 2600000,
+            "description": "DOGE sell pressure"
+          }
+        },
+        {
+          "round": 3,
+          "PEPE": {
+            "priceChange": 1.8,
+            "volume": 2100000,
+            "description": "PEPE holds strength"
+          },
+          "DOGE": {
+            "priceChange": -1.2,
+            "volume": 2300000,
+            "description": "DOGE finds floor"
+          }
+        },
+        {
+          "round": 4,
+          "PEPE": {
+            "priceChange": 4.2,
+            "volume": 2800000,
+            "description": "PEPE acceleration"
+          },
+          "DOGE": {
+            "priceChange": -4.7,
+            "volume": 3100000,
+            "description": "DOGE capitulation"
+          }
+        },
+        {
+          "round": 5,
+          "PEPE": {
+            "priceChange": 2.9,
+            "volume": 2500000,
+            "description": "PEPE steady gains"
+          },
+          "DOGE": {
+            "priceChange": -2.3,
+            "volume": 2700000,
+            "description": "DOGE weakness persists"
+          }
+        },
+        {
+          "round": 6,
+          "PEPE": {
+            "priceChange": 5.8,
+            "volume": 3200000,
+            "description": "PEPE explosive finish"
+          },
+          "DOGE": {
+            "priceChange": -5.1,
+            "volume": 3400000,
+            "description": "DOGE final flush"
+          }
+        }
+      ]
+    }
+  }
+}

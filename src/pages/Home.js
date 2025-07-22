@@ -5,6 +5,84 @@ import { Container, Grid, Card, Box, Typography, Button, Divider } from '@mui/ma
 import PageContainer from '../components/common/PageContainer';
 
 const Home = () => {
+
+
+const crackStyles = {
+  container: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    padding: '20px'
+  },
+  title: {
+    fontSize: '72px',
+    color: '#FFD700',
+    textShadow: '0 0 30px #FFD700',
+    fontWeight: 'bold',
+    marginBottom: '20px'
+  },
+  subtitle: {
+    fontSize: '24px',
+    color: '#00FFF7',
+    marginBottom: '40px'
+  },
+  fighterGrid: {
+    display: 'flex',
+    gap: '40px',
+    marginBottom: '40px',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  fighterCard: {
+    background: 'rgba(0, 0, 0, 0.8)',
+    border: '3px solid',
+    borderRadius: '12px',
+    padding: '30px',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
+    minWidth: '250px'
+  },
+  slothCard: {
+    borderColor: '#00FFF7',
+    '&:hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: '0 10px 30px rgba(0, 255, 247, 0.5)'
+    }
+  },
+  monarchCard: {
+    borderColor: '#FF3EC9',
+    '&:hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: '0 10px 30px rgba(255, 62, 201, 0.5)'
+    }
+  },
+  startButton: {
+    background: '#00FF00',
+    color: 'black',
+    border: 'none',
+    padding: '20px 60px',
+    fontSize: '24px',
+    fontWeight: 'bold',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    boxShadow: '0 0 30px #00FF00',
+    textTransform: 'uppercase'
+  },
+  disabledButton: {
+    background: '#666',
+    boxShadow: 'none',
+    cursor: 'not-allowed'
+  },
+  wallet: {
+    marginTop: '20px',
+    fontSize: '18px',
+    color: '#FFD700'
+  }
+};
+
   const navigate = useNavigate();
 
   const handlePlay = (species) => {

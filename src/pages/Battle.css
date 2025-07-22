@@ -1,0 +1,742 @@
+/* Battle Container */
+.battle-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1a0033, #2d1b69);
+  color: white;
+  display: flex;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fight Log Panel */
+.fight-log-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 400px;
+  background: rgba(20, 20, 30, 0.95);
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.fight-log-panel.closed {
+  transform: translateX(-360px);
+}
+
+.panel-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab {
+  flex: 1;
+  padding: 15px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tab.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #00FFF7;
+}
+
+.quest-count {
+  background: #00FF00;
+  color: black;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.fight-log-content {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 15px;
+}
+
+.log-entry {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.log-entry.mossmouth {
+  background: rgba(0, 255, 247, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 247, 0.3);
+}
+
+.log-entry.trade {
+  color: #FFD700;
+}
+
+.log-entry.end {
+  color: #FF3EC9;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.mossmouth-icon, .mossmouth-icon-fallback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #00FFF7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.log-message {
+  flex: 1;
+}
+
+.log-header {
+  font-weight: bold;
+  color: #00FFF7;
+  margin-bottom: 5px;
+}
+
+.log-text {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.panel-toggle {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 60px;
+  background: rgba(20, 20, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main content area - adjusted for panel */
+.battle-container > *:not(.fight-log-panel) {
+  margin-left: 400px;
+  transition: margin-left 0.3s ease;
+}
+
+.fight-log-panel.closed ~ * {
+  margin-left: 40px;
+}
+
+/* Screen shake effect */
+.screen-shake {
+  animation: screen-shake 0.5s;
+}
+
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5px, -5px); }
+  20% { transform: translate(5px, -5px); }
+  30% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, 5px); }
+  50% { transform: translate(-3px, -3px); }
+  60% { transform: translate(3px, -3px); }
+  70% { transform: translate(-3px, 3px); }
+  80% { transform: translate(3px, 3px); }
+  90% { transform: translate(-1px, -1px); }
+}
+
+/* Character hit effects */
+.character-hit-3toed {
+  filter: brightness(1.5) hue-rotate(180deg);
+  animation: hit-flash 0.5s;
+}
+
+.character-hit-mnrch {
+  filter: brightness(1.5) hue-rotate(-90deg);
+  animation: hit-flash 0.5s;
+}
+
+@keyframes hit-flash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); filter: brightness(2) saturate(2); }
+  100% { transform: scale(1); }
+}
+
+/* Damage numbers */
+.damage-number {
+  position: absolute;
+  font-size: 64px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 
+    3px 3px 0 #000,
+    -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+    0 0 10px rgba(255, 215, 0, 0.8);
+  animation: damage-float 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 100;
+}
+
+@keyframes damage-float {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Top Section - HP Bars and Timer */
+.battle-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+}
+
+.hp-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.hp-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* HP bars with proper styling - removed double border */
+.hp-bar-container {
+  width: 100%;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hp-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.hp-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: white;
+  box-shadow: 0 0 10px currentColor;
+  animation: hp-bar-glow 1s infinite;
+}
+
+@keyframes hp-bar-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.hp-bar-3toed {
+  background: linear-gradient(90deg, #00FFF7, #00B8D4);
+}
+
+.hp-bar-mnrch {
+  background: linear-gradient(90deg, #FF3EC9, #FF1493);
+}
+
+.hp-flash {
+  animation: hp-flash 0.5s;
+}
+
+@keyframes hp-flash {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(2) saturate(2); }
+}
+
+.hp-value {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+/* Timer without Attack Strength */
+.round-timer {
+  text-align: center;
+  flex: 0 0 auto;
+  min-width: 200px;
+}
+
+.timer-label {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.timer-value {
+  font-size: 72px;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 20px #FFD700;
+  line-height: 1;
+}
+
+.timer-urgent {
+  color: #FF3EC9;
+  animation: timer-pulse 0.5s infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.round-label {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+/* Battle Arena */
+.battle-arena {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+
+.characters-container {
+  max-width: 100%;
+  margin-bottom: 30px;
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.characters-container img {
+  max-width: 100%;
+  height: auto;
+  max-height: 50vh;
+  object-fit: contain;
+}
+
+/* Trading Section - Fixed for desktop */
+.trading-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 40px;
+  margin-top: auto;
+  position: relative;
+}
+
+/* Ratio bar positioned above reload button */
+.ratio-bar-container {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.ratio-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+
+.ratio-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.ratio-3toed {
+  background: linear-gradient(90deg, #00FFF7, #00B8D4);
+}
+
+.ratio-mnrch {
+  background: linear-gradient(90deg, #FF3EC9, #FF1493);
+}
+
+.ratio-text {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Token Boxes - Fixed height to prevent cutoff */
+.token-box {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  width: 200px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: all 0.3s ease;
+}
+
+.token-3toed {
+  border: 3px solid #00FFF7;
+  box-shadow: 0 0 20px rgba(0, 255, 247, 0.5);
+}
+
+.token-mnrch {
+  border: 3px solid #FF3EC9;
+  box-shadow: 0 0 20px rgba(255, 62, 201, 0.5);
+}
+
+.momentum-glow {
+  animation: momentum-pulse 2s infinite;
+}
+
+@keyframes momentum-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 40px currentColor;
+  }
+}
+
+.token-header {
+  margin-bottom: 5px;
+}
+
+.token-amount {
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.token-name {
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+/* Momentum Bar */
+.momentum-bar {
+  margin: 5px 0;
+}
+
+.momentum-label {
+  font-size: 12px;
+  margin-bottom: 5px;
+  opacity: 0.8;
+}
+
+.momentum-segments {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+}
+
+.segment {
+  width: 20px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.segment.active {
+  background: #FFD700;
+  box-shadow: 0 0 5px #FFD700;
+}
+
+/* Trade Buttons - Fixed visibility */
+.trade-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.trade-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.buy-btn {
+  background: #00FF00;
+  color: #000;
+}
+
+.buy-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00FF00;
+}
+
+.sell-btn {
+  background: #FF0000;
+  color: #FFF;
+}
+
+.sell-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #FF0000;
+}
+
+.sell-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Main Reload Button with ratio container */
+.reload-button-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.main-trade-btn {
+  padding: 15px 40px;
+  font-size: 24px;
+  background: #FFD700;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 200px;
+}
+
+.main-trade-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #FFD700;
+}
+
+.main-trade-btn.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 215, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+}
+
+/* Trade effect animation */
+.trade-effect {
+  position: absolute;
+  font-size: 32px;
+  font-weight: bold;
+  animation: trade-float 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.trade-effect.buy {
+  color: #00FF00;
+}
+
+.trade-effect.sell {
+  color: #FF0000;
+}
+
+@keyframes trade-float {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+/* Fight Overlay */
+.fight-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.fight-text {
+  font-size: 120px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 
+    5px 5px 0 #000,
+    -5px -5px 0 #000,
+    5px -5px 0 #000,
+    -5px 5px 0 #000,
+    0 0 30px rgba(255, 215, 0, 0.8);
+  animation: fight-zoom 1s ease-out;
+}
+
+@keyframes fight-zoom {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .fight-log-panel {
+    width: 80%;
+  }
+  
+  .fight-log-panel.closed {
+    transform: translateX(-100%);
+  }
+  
+  .battle-container > *:not(.fight-log-panel) {
+    margin-left: 0;
+  }
+  
+  .battle-top-section {
+    flex-wrap: wrap;
+  }
+  
+  .hp-section {
+    min-width: 45%;
+  }
+  
+  .round-timer {
+    order: -1;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .timer-value {
+    font-size: 48px;
+  }
+
+  .trading-section {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .token-box {
+    width: 45%;
+    min-width: 140px;
+  }
+
+  .main-trade-btn {
+    order: -1;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .damage-number {
+    font-size: 48px;
+  }
+  
+  .fight-text {
+    font-size: 80px;
+  }
+}

@@ -1,0 +1,379 @@
+/* CRACK EDITION - Minimal viable styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: #1a0033;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Start Screen */
+  .start-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 72px;
+    color: #FFD700;
+    text-shadow: 0 0 30px #FFD700;
+    margin-bottom: 20px;
+  }
+  
+  .subtitle {
+    font-size: 24px;
+    color: #00FFF7;
+    margin-bottom: 40px;
+  }
+  
+  .fighter-select {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  
+  .fighter-option {
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+  }
+  
+  .fighter-option.sloth {
+    border-color: #00FFF7;
+  }
+  
+  .fighter-option.monarch {
+    border-color: #FF3EC9;
+  }
+  
+  .fighter-option.selected {
+    box-shadow: 0 0 30px currentColor;
+    transform: scale(1.05);
+  }
+  
+  .fighter-option h3 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .start-btn {
+    padding: 20px 60px;
+    font-size: 24px;
+    background: #00FF00;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .start-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+  }
+  
+  .wallet-preview {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #FFD700;
+  }
+  
+  /* Game Screen */
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .hp-container {
+    flex: 1;
+  }
+  
+  .fighter-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .fighter-name.sloth {
+    color: #00FFF7;
+  }
+  
+  .fighter-name.monarch {
+    color: #FF3EC9;
+    text-align: right;
+  }
+  
+  .hp-bar {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hp-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+  }
+  
+  .hp-fill.sloth {
+    background: #00FFF7;
+  }
+  
+  .hp-fill.monarch {
+    background: #FF3EC9;
+  }
+  
+  .hp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+  }
+  
+  .timer {
+    font-size: 60px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 0 30px #FFD700;
+    min-width: 100px;
+    text-align: center;
+  }
+  
+  /* Arena */
+  .arena {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .round-display {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .market-popup {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 24px;
+    animation: fadeInOut 2s;
+  }
+  
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    20%, 80% { opacity: 1; }
+  }
+  
+  /* Trading Section */
+  .bottom-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .token-box {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 3px solid;
+  }
+  
+  .token-box.sloth {
+    border-color: #00FFF7;
+  }
+  
+  .token-box.monarch {
+    border-color: #FF3EC9;
+  }
+  
+  .token-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .token-amount {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  .momentum-bar {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .segment {
+    width: 30px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+  
+  .segment.active {
+    background: #FFD700;
+    box-shadow: 0 0 10px #FFD700;
+  }
+  
+  .trade-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .trade-buttons button {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .trade-buttons button:first-child {
+    background: #00FF00;
+    color: black;
+  }
+  
+  .trade-buttons button:last-child {
+    background: #FF0000;
+    color: white;
+  }
+  
+  .final-btn {
+    padding: 20px 40px;
+    font-size: 20px;
+    background: #FFD700;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .final-btn small {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  /* Wallet Display */
+  .wallet-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 15px;
+    min-width: 150px;
+  }
+  
+  .wallet-display h3 {
+    color: #FFD700;
+    margin-bottom: 10px;
+  }
+  
+  /* Battle Log */
+  .battle-log {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00FFF7;
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .battle-log h3 {
+    color: #00FFF7;
+    margin-bottom: 10px;
+  }
+  
+  .log-entry {
+    margin: 5px 0;
+    padding: 5px;
+    border-left: 3px solid #FFD700;
+    padding-left: 10px;
+    font-size: 14px;
+  }
+  
+  /* Victory Screen */
+  .victory-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .victory-screen h1 {
+    font-size: 72px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 50px currentColor;
+  }
+  
+  .sloth-win {
+    color: #00FFF7;
+  }
+  
+  .monarch-win {
+    color: #FF3EC9;
+  }
+  
+  .victory-screen p {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
+  
+  .victory-screen button {
+    padding: 20px 40px;
+    font-size: 24px;
+    background: #FFD700;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }

@@ -1,0 +1,212 @@
+/* CRACK EDITION STYLES - Updated for existing app */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #1a0033, #2d1b69);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Hide all the complex UI elements temporarily */
+  .MuiAppBar-root,
+  .MuiToolbar-root {
+    display: none !important;
+  }
+  
+  /* Home/Start Screen Styles */
+  .MuiContainer-root {
+    padding-top: 0 !important;
+  }
+  
+  /* Title styling */
+  h1, .MuiTypography-h1 {
+    font-size: 72px !important;
+    color: #FFD700 !important;
+    text-shadow: 0 0 30px #FFD700 !important;
+    margin-bottom: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+  
+  h4, .MuiTypography-h4 {
+    font-size: 24px !important;
+    color: #00FFF7 !important;
+    text-align: center !important;
+    margin-bottom: 40px !important;
+  }
+  
+  /* Fighter select cards */
+  .MuiCard-root {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 12px !important;
+    padding: 30px !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+  }
+  
+  .MuiCard-root:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3) !important;
+  }
+  
+  /* Fighter specific colors */
+  .MuiCard-root:first-child {
+    border: 3px solid #00FFF7 !important;
+  }
+  
+  .MuiCard-root:last-child {
+    border: 3px solid #FF3EC9 !important;
+  }
+  
+  /* Button styles */
+  .MuiButton-root {
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    font-size: 18px !important;
+    padding: 15px 40px !important;
+  }
+  
+  .MuiButton-contained {
+    background: #00FF00 !important;
+    color: black !important;
+    box-shadow: 0 0 20px #00FF00 !important;
+  }
+  
+  .MuiButton-contained:hover {
+    background: #00CC00 !important;
+    box-shadow: 0 0 30px #00FF00 !important;
+  }
+  
+  .MuiButton-contained.Mui-disabled {
+    background: #666 !important;
+    color: #333 !important;
+    box-shadow: none !important;
+  }
+  
+  /* Center everything */
+  .MuiBox-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Full height for start screen */
+  body > #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Battle Screen Styles (when implemented) */
+  .battle-container {
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* HP Bars */
+  .hp-bar {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  
+  .hp-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+  }
+  
+  .hp-fill.sloth {
+    background: linear-gradient(90deg, #00FFF7, #00B8D4);
+  }
+  
+  .hp-fill.monarch {
+    background: linear-gradient(90deg, #FF3EC9, #FF1493);
+  }
+  
+  /* Timer */
+  .timer {
+    font-size: 60px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 0 30px #FFD700;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  /* Token boxes */
+  .token-box {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin: 10px;
+  }
+  
+  .token-box.sloth {
+    border: 3px solid #00FFF7;
+    box-shadow: 0 0 20px #00FFF7;
+  }
+  
+  .token-box.monarch {
+    border: 3px solid #FF3EC9;
+    box-shadow: 0 0 20px #FF3EC9;
+  }
+  
+  /* Remove all default MUI styling overrides that conflict */
+  .MuiPaper-root {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  /* Wallet display text */
+  .wallet-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 15px;
+    color: #FFD700;
+    font-weight: bold;
+  }
+  
+  /* Clean up the layout */
+  .MuiGrid-root {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Fighter option text */
+  .MuiTypography-h3 {
+    color: inherit !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Description text */
+  .MuiTypography-body2 {
+    opacity: 0.8;
+  }
+  
+  /* Override any remaining MUI dark theme issues */
+  .MuiCssBaseline-root {
+    background-color: transparent !important;
+  }

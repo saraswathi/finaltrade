@@ -112,19 +112,23 @@ The prototype operates in a simulated environment:
 - Market data is generated and manipulated locally
 - All transactions are simulated without actual blockchain interaction
 
+Personas/Wallets: Players start with 0 battle tokens, must buy to influence fights. Personas are:
+
+New Recruit: 1-2 ETH, 50-75 $FINAL
+Buff Chaser: 3-4 ETH, 100-149 $FINAL
+Market Mover: 5 ETH, 150-200 $FINAL
+Whale: 10 ETH, 200-300+ $FINAL
+
+
+Market Data: Game will mask PEPE/DOGE historical data as 3TOED/MNRCH movements
+
 To test the game mechanics:
 
 1. Start a simulation with the controls at the top of the Battle page
 2. Use the Buy/Sell panel to manually influence the game
 3. Watch how market actions translate to game events in the battle log
 
-### Asset Requirements
 
-For production deployment, you'll need to add these assets:
-
-- Species token logos in `public/assets/images/`
-- Background image (`cyberpunk-alley-bg.jpg` in `public/assets/images/`)
-- Animation JSON files in `public/assets/animations/`
 
 ## Future Implementation
 
@@ -135,6 +139,3 @@ To move from prototype to production:
 3. Replace simulated market data with real on-chain events
 4. Implement staking mechanics and additional game features
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

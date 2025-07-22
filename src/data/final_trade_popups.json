@@ -1,0 +1,46 @@
+{
+  "popups": {
+    "price_surge": [
+      "Price Surge: DOGE just jumped +2.4%",
+      "Sloth\u2019s token drops hard: \u20131.8%",
+      "New candle flipped: Monarch rallies!",
+      "Flash swing: PEPE rips through resistance",
+      "Volatility spike: both tokens moving fast"
+    ],
+    "volume_spike": [
+      "Volume Spike Detected: Sloth heating up",
+      "DOGE liquidity rush: wings beat faster",
+      "Buy wall forming\u2026 is a major move coming?",
+      "Order book trembles: pressure builds",
+      "Something\u2019s brewing\u2026 volume just doubled"
+    ],
+    "player_input": [
+      "Big buy registered: Sloth builds strength!",
+      "Momentum shift: Monarch gains edge",
+      "Your trades tip the scale \u2014 keep going!",
+      "Major input spike: crowd energy surging",
+      "Momentum bar unlocked: glow intensifies"
+    ],
+    "buff_trigger": [
+      "$F threshold crossed: +1 strength bonus active",
+      "Buff triggered: Monarch empowered by $F",
+      "Gold Puff rising\u2026 bonus momentum gained",
+      "Sloth regens: +5 HP from $F infusion",
+      "$F flows detected \u2014 effects now live"
+    ],
+    "strength_feedback": [
+      "Tier 5 strength! Devastating impact.",
+      "Tier 2 move lands \u2014 not much damage",
+      "Momentum converted: major strike delivered",
+      "Critical swing! Monarch nearly knocked out",
+      "Sloth\u2019s strike lands \u2014 Monarch stumbles"
+    ],
+    "round_pacing": [
+      "Next major move incoming\u2026",
+      "Round 4 begins \u2014 who holds the edge?",
+      "Final round approaching \u2014 every input counts",
+      "Cooldown ending\u2026 brace for volatility",
+      "Market recalibrating\u2026 round ends"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sloth": {
+    "pos": "sloth_momentum_up.png",
+    "neg": "sloth_momentum_down.png"
+  },
+  "monarch": {
+    "pos": "monarch_momentum_up.png",
+    "neg": "monarch_momentum_down.png"
+  }
+}
